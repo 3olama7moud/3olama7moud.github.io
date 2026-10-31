@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>لوحة التحكم</title>
+<style>
+:root{--ink:#1f1a2e;--paper:#fbf8f4;--rose:#c8325f;--line:#d9d1e3}
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;background:var(--paper);color:var(--ink);margin:0;padding:20px;line-height:1.7}
+main{max-width:560px;margin:0 auto}
+h1{font-size:1.5rem;margin:0 0 4px}
+h2{font-size:1.1rem;margin:28px 0 10px}
+label{display:block;margin:14px 0 4px;font-weight:600}
+input,textarea,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff;color:var(--ink)}
+textarea{min-height:90px}
+button{font:inherit;padding:12px 24px;border:0;border-radius:999px;background:var(--ink);color:#fff;cursor:pointer;margin-top:16px}
+button:disabled{opacity:.5}
+button.main{background:var(--rose);width:100%}
+#msg{margin-top:16px;padding:12px;border-radius:8px;display:none}
+#msg.ok{display:block;background:#dff3e4}
+#msg.err{display:block;background:#fbdede}
+.hide{display:none}
+small{color:#6b6480}
+a{color:var(--rose)}
+</style>
+</head>
+<body>
+<main>
+<h1>لوحة التحكم</h1>
+<small>خاصة بصاحبة الموقع فقط</small>
+
+<section id="login">
+<label for="tok">مفتاح الدخول</label>
+<input id="tok" type="password" placeholder="الصقي المفتاح هنا" autocomplete="off">
+<button id="enter">دخول</button>
+</section>
+
+<section id="panel" class="hide">
+<h2>النصوص</h2>
+<label for="h1">العنوان الكبير</label>
+<input id="h1">
+<label for="hp">الجملة تحته</label>
+<textarea id="hp"></textarea>
+<label for="about">نبذة عني</label>
+<textarea id="about"></textarea>
+
+<h2>التواصل</h2>
+<label for="wa">رقم الواتساب (بكود الدولة، مثل 201012345678)</label>
+<input id="wa" inputmode="numeric">
+<label for="em">الإيميل</label>
+<input id="em" type="email">
+<button class="main" id="save">حفظ التعديلات</button>
+
+<h2>رفع صورة لأعمالك</h2>
+<label for="slot">مكان الصورة</label>
+<select id="slot">
+<option value="1">صورة 1 (لوجو)</option>
+<option value="2">صورة 2 (سوشيال ميديا)</option>
+<option value="3">صورة 3 (مطبوعات)</option>
+<option value="4">صورة 4 (لوجو)</option>
+<option value="5">صورة 5 (سوشيال ميديا)</option>
+<option value="6">صورة 6 (مطبوعات)</option>
+</select>
+<label for="img">اختاري الصورة</label>
+<input id="img" type="file" accept="image/*">
+<button id="up">رفع الصورة</button>
+
+<p><a href="./" target="_blank">فتح الموقع</a> · <a href="#" id="out">خروج</a></p>
+</section>
+
+<div id="msg" role="status"></div>
+</main>
+
+<script>
+const REPO='3olama7moud/3olama7moud.github.io',API='https://api.github.com/repos/'+REPO+'/contents/';
+const $=id=>document.getElementById(id);
+let sha='',src='';
+const get=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+const put=(k,v)=>{try{v===null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}};
+function say(t,ok){const m=$('msg');m.textContent=t;m.className=ok?'ok':'err'}
+function hdr(){return{Authorization:'Bearer '+get('tok'),Accept:'application/vnd.github+json'}}
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const unesc=s=>s.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
+const b64=s=>{const b=new TextEncoder().encode(s);let r='';b.forEach(c=>r+=String.fromCharCode(c));return btoa(r)};
+const unb64=s=>new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\n/g,'')),c=>c.charCodeAt(0)));
+
+async function load(){
+  const r=await fetch(API+'index.html?ref=main&t='+Date.now(),{headers:hdr()});
+  if(!r.ok)throw new Error(r.status===401?'المفتاح غير صحيح':'تعذر تحميل الموقع ('+r.status+')');
+  const j=await r.json();sha=j.sha;src=unb64(j.content);
+  const m=(re)=>{const x=src.match(re);return x?unesc(x[2]):''};
+  $('h1').value=m(/(<section class="hero">[\s\S]*?<h1>)([\s\S]*?)(<\/h1>)/);
+  $('hp').value=m(/(<section class="hero">[\s\S]*?<p>)([\s\S]*?)(<\/p>)/);
+  $('about').value=m(/(<h2>عني<\/h2>\s*<p>)([\s\S]*?)(<\/p>)/);
+  $('wa').value=(src.match(/wa\.me\/(\d+)/)||[])[1]||'';
+  $('em').value=(src.match(/mailto:([^"]+)"/)||[])[1]||'';
+  $('login').classList.add('hide');$('panel').classList.remove('hide');
+}
+async function enter(){
+  put('tok',$('tok').value.trim());
+  try{say('جاري الدخول...',true);await load();say('تم الدخول',true)}
+  catch(e){put('tok',null);say(e.message,false)}
+}
+$('enter').onclick=enter;
+$('out').onclick=e=>{e.preventDefault();put('tok',null);location.reload()};
+
+$('save').onclick=async()=>{
+  const b=$('save');b.disabled=true;say('جاري الحفظ...',true);
+  try{
+    await load();
+    let s=src;
+    const rep=(re,v)=>{s=s.replace(re,(a,p,o,q)=>p+v+q)};
+    rep(/(<section class="hero">[\s\S]*?<h1>)([\s\S]*?)(<\/h1>)/,esc($('h1').value));
+    rep(/(<section class="hero">[\s\S]*?<p>)([\s\S]*?)(<\/p>)/,esc($('hp').value));
+    rep(/(<h2>عني<\/h2>\s*<p>)([\s\S]*?)(<\/p>)/,esc($('about').value));
+    s=s.replace(/wa\.me\/\d+/,'wa.me/'+$('wa').value.replace(/\D/g,''));
+    s=s.replace(/mailto:[^"]+"/,'mailto:'+$('em').value.trim()+'"');
+    const r=await fetch(API+'index.html',{method:'PUT',headers:hdr(),body:JSON.stringify({message:'تعديل من لوحة التحكم',content:b64(s),sha,branch:'main'})});
+    if(!r.ok)throw new Error('فشل الحفظ ('+r.status+')');
+    say('تم الحفظ. الموقع هيتحدّث بعد دقيقة تقريبًا.',true);
+  }catch(e){say(e.message,false)}
+  b.disabled=false;
+};
+
+function shrink(file){return new Promise((res,rej)=>{
+  const im=new Image(),u=URL.createObjectURL(file);
+  im.onload=()=>{const k=Math.min(1,1200/Math.max(im.width,im.height));
+    const c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;
+    c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+    res(c.toDataURL('image/jpeg',.85).split(',')[1])};
+  im.onerror=()=>rej(new Error('الصورة غير مدعومة'));im.src=u})}
+
+$('up').onclick=async()=>{
+  const f=$('img').files[0];if(!f){say('اختاري صورة الأول',false);return}
+  const b=$('up');b.disabled=true;say('جاري رفع الصورة...',true);
+  try{
+    const data=await shrink(f),path='work'+$('slot').value+'.jpg';
+    let old='';const g=await fetch(API+path+'?ref=main&t='+Date.now(),{headers:hdr()});
+    if(g.ok)old=(await g.json()).sha;
+    const body={message:'رفع '+path,content:data,branch:'main'};if(old)body.sha=old;
+    const r=await fetch(API+path,{method:'PUT',headers:hdr(),body:JSON.stringify(body)});
+    if(!r.ok)throw new Error('فشل الرفع ('+r.status+')');
+    say('تم رفع الصورة. هتظهر في الموقع بعد دقيقة تقريبًا.',true);
+  }catch(e){say(e.message,false)}
+  b.disabled=false;
+};
+
+if(get('tok')){load().then(()=>say('',true),()=>{put('tok',null)})}
+</script>
+</body>
+</html>
