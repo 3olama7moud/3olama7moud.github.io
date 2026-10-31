@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>علا محمود | تصاميم وأعمال</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;700&family=IBM+Plex+Sans+Arabic:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1f1a2e;--paper:#fbf8f4;--rose:#c8325f;--mist:#ece6f2;--line:#d9d1e3}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'IBM Plex Sans Arabic',sans-serif;background:var(--paper);color:var(--ink);line-height:1.8}
+a{color:inherit}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+header{padding:18px 0;border-bottom:1px solid var(--line)}
+header .wrap{display:flex;justify-content:space-between;align-items:center}
+.logo{font-family:'Reem Kufi',sans-serif;font-weight:700;font-size:1.3rem;text-decoration:none}
+nav a{margin-inline-start:18px;text-decoration:none;font-size:.95rem}
+nav a:hover,nav a:focus-visible{color:var(--rose)}
+.hero{padding:70px 0 50px}
+.hero h1{font-family:'Reem Kufi',sans-serif;font-size:clamp(2.4rem,9vw,4.8rem);line-height:1.25;font-weight:700;max-width:12em}
+.hero p{margin-top:18px;max-width:30em;font-size:1.1rem;color:#4a4360}
+.btn{display:inline-block;margin-top:26px;padding:12px 26px;background:var(--ink);color:var(--paper);text-decoration:none;border-radius:999px;font-weight:500}
+.btn:hover,.btn:focus-visible{background:var(--rose)}
+h2{font-family:'Reem Kufi',sans-serif;font-size:1.9rem;margin-bottom:22px}
+section{padding:46px 0}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.filters button{font:inherit;padding:6px 18px;border:1px solid var(--ink);background:none;border-radius:999px;cursor:pointer;color:var(--ink)}
+.filters button.on{background:var(--ink);color:var(--paper)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+figure{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:6px;background:var(--mist)}
+figure img{width:100%;height:100%;object-fit:cover;display:block}
+figure.ph{display:flex;align-items:flex-end;padding:16px}
+figcaption{position:absolute;inset:auto 0 0 0;padding:28px 14px 12px;background:linear-gradient(transparent,rgba(31,26,46,.78));color:#fff;font-size:.95rem}
+figure.ph figcaption{background:none;color:var(--ink);position:static;padding:0}
+.c1{background:#f3c9d6}.c2{background:#cfe3d6}.c3{background:#d9d2ee}.c4{background:#f6e0b8}.c5{background:#c9dcef}.c6{background:#efd3c4}
+.about{display:grid;gap:26px;grid-template-columns:1fr}
+.skills{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin-top:14px}
+.skills li{padding:4px 16px;background:var(--mist);border-radius:999px;font-size:.95rem}
+.contact{background:var(--ink);color:var(--paper);border-radius:10px;padding:40px 24px;text-align:center}
+.contact p{margin-bottom:6px}
+.contact a{display:inline-block;margin:10px 6px 0;padding:10px 24px;border:1px solid var(--paper);border-radius:999px;text-decoration:none}
+.contact a:hover,.contact a:focus-visible{background:var(--rose);border-color:var(--rose)}
+footer{padding:26px 0;text-align:center;font-size:.9rem;color:#6b6480}
+@media(min-width:760px){.about{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<a class="logo" href="#">علا محمود</a>
+<nav><a href="#works">أعمالي</a><a href="#about">عني</a><a href="#contact">تواصل</a></nav>
+</div></header>
+
+<main>
+<section class="hero"><div class="wrap">
+<h1>أصمّم هوية وصور تخلّي شغلك يتشاف.</h1>
+<p>أنا علا، مصممة جرافيك. بحوّل الفكرة لتصميم واضح وجميل يناسب مشروعك.</p>
+<a class="btn" href="#works">شوفي أعمالي</a>
+</div></section>
+
+<section id="works"><div class="wrap">
+<h2>أعمالي</h2>
+<div class="filters" id="filters">
+<button class="on" data-f="all">الكل</button>
+<button data-f="logo">لوجو</button>
+<button data-f="social">سوشيال ميديا</button>
+<button data-f="print">مطبوعات</button>
+</div>
+<div class="grid" id="grid">
+<!-- لإضافة عمل: ارفعي الصورة بنفس الاسم (work1.jpg ... work6.jpg) وهتظهر تلقائيًا -->
+<figure class="ph c1" data-c="logo"><img src="work1.jpg" alt="تصميم لوجو" onerror="this.remove()"><figcaption>لوجو</figcaption></figure>
+<figure class="ph c2" data-c="social"><img src="work2.jpg" alt="تصميم سوشيال ميديا" onerror="this.remove()"><figcaption>سوشيال ميديا</figcaption></figure>
+<figure class="ph c3" data-c="print"><img src="work3.jpg" alt="تصميم مطبوعات" onerror="this.remove()"><figcaption>مطبوعات</figcaption></figure>
+<figure class="ph c4" data-c="logo"><img src="work4.jpg" alt="تصميم لوجو" onerror="this.remove()"><figcaption>لوجو</figcaption></figure>
+<figure class="ph c5" data-c="social"><img src="work5.jpg" alt="تصميم سوشيال ميديا" onerror="this.remove()"><figcaption>سوشيال ميديا</figcaption></figure>
+<figure class="ph c6" data-c="print"><img src="work6.jpg" alt="تصميم مطبوعات" onerror="this.remove()"><figcaption>مطبوعات</figcaption></figure>
+</div>
+</div></section>
+
+<section id="about"><div class="wrap about">
+<div>
+<h2>عني</h2>
+<p>مصممة جرافيك بحب أحوّل الأفكار لتصاميم واضحة ومميزة. بشتغل على اللوجو والهوية البصرية وتصاميم السوشيال ميديا والمطبوعات.</p>
+</div>
+<div>
+<h2>المهارات</h2>
+<ul class="skills"><li>هوية بصرية</li><li>لوجو</li><li>سوشيال ميديا</li><li>فوتوشوب</li><li>إليستريتور</li></ul>
+</div>
+</div></section>
+
+<section id="contact"><div class="wrap">
+<div class="contact">
+<h2>عندك مشروع؟</h2>
+<p>ابعتيلي فكرتك ونبدأ.</p>
+<a href="https://wa.me/201221440402">واتساب</a>
+<a href="mailto:Ola516429@gmail.com">إيميل</a>
+</div>
+</div></section>
+</main>
+
+<footer><div class="wrap">© علا محمود</div></footer>
+
+<script>
+const btns=document.querySelectorAll('#filters button'),items=document.querySelectorAll('#grid figure');
+btns.forEach(b=>b.addEventListener('click',()=>{
+btns.forEach(x=>x.classList.remove('on'));b.classList.add('on');
+items.forEach(i=>{i.style.display=(b.dataset.f==='all'||i.dataset.c===b.dataset.f)?'':'none'});
+}));
+</script>
+</body>
+</html>
